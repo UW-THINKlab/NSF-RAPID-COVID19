@@ -11,7 +11,7 @@ $ pip install -r requirements.txt
 
 Now, make sure rpy2 is working and install the required R packages:  
 ```console
-$ python  installing_packages.py
+$ python installing_packages.py
 ```  
 
 ## rpy2_examples
@@ -29,3 +29,11 @@ A simple SIR model is implemented in SIR_example.R and can be called by running 
 $ cd COVID19_models
 $ python python call_model.py
 ```
+
+## COVID19_env
+This folder will contain RL environments for COVID-19. The first environment is
+based on COVID19_models/SIR_example.R and is not yet completed.
+
+## stable_baselines_examples
+This folder contains relevant Stable Baselines RL examples for reference when
+working on our COVID-19 RL implementation.
