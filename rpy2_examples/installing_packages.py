@@ -18,3 +18,5 @@ from rpy2.robjects.vectors import StrVector
 names_to_install = [x for x in packnames if not rpackages.isinstalled(x)]
 if len(names_to_install) > 0:
     utils.install_packages(StrVector(names_to_install))
+
+    
