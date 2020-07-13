@@ -9,7 +9,7 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```  
 
-Now, make sure rpy2 is working and install the required R packages:  
+Make sure rpy2 is working and install the required R packages:  
 ```console
 $ python installing_packages.py
 ```  
@@ -32,7 +32,8 @@ $ python python call_model.py
 
 ## COVID19_env
 This folder will contain RL environments for COVID-19. The first environment is
-based on COVID19_models/SIR_example.R and is not yet completed.
+called simple_SIR_env.py and is based on a minimal SIR model. A first draft of
+this environment is complete and passes the test chech_env.py.
 
 ## stable_baselines_examples
 This folder contains relevant Stable Baselines RL examples for reference when
