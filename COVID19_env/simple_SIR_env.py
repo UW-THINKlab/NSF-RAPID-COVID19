@@ -33,22 +33,22 @@ class simple_SIR_env(gym.Env):
 
   Actions:
         Type: Discrete(3)
-        Num     Action
-        0       open everything
-        1       open at half capacity
-        2       stay at home order
+        Num     Action                      Change in model
+        0       open everything             beta = 0.004
+        1       open at half capacity       beta = 0.002
+        2       stay at home order          beta = 0.001
 
   Reward:
         reward = health cost + economic cost
 
         Health cost:
-            -1 for every infected case
+            -1  for every infected case
             -10 for every infected case that brings total infected count above a
-                specified (hospital capacity) maximum
-        Economic cost
+                specified maximum (hospital capacity)
+        Economic cost:
              0 for every day using 'open everything'
-            -1 for every day using 'open at half capacity'
-            -2 for every day using 'stay at home order'
+           -10 for every day using 'open at half capacity'
+          -100 for every day using 'stay at home order'
 
   Starting State:
         Susceptible:    999
@@ -63,13 +63,13 @@ class simple_SIR_env(gym.Env):
 
   metadata = {'render.modes': ['human']}
 
-  def __init__(self):
+  def __init__(self, S0, I0, R0, hospitalCapacity):
     super(simple_SIR_env, self).__init__()
 
     # SIR model parameters
     self.beta  = 0.004     # infectious contact rate (/person/day)
     self.gamma = 0.5       # recovery rate (/day)
-    self.hospitalCap = 300  # maximum number of people in the ICU
+    self.hospitalCap = hospitalCapacity  # maximum number of people in the ICU
     self.dt = 1            # time step
 
     # beta variation table, each corresponding to actions 0,1,2 respectively
@@ -79,9 +79,9 @@ class simple_SIR_env(gym.Env):
     self.economicCost = (0,-10,-100)
 
     # SIR model initial conditions
-    self.S0 = 999   # number of susceptibles at time = 0
-    self.I0 =   1   # number of infectious at time = 0
-    self.R0 =   0   # number of recovered (and immune) at time = 0
+    self.S0 = S0   # number of susceptibles at time = 0
+    self.I0 = I0   # number of infectious at time = 0
+    self.R0 = R0   # number of recovered (and immune) at time = 0
 
     # Define action and observation space
     # They must be gym.spaces objects
@@ -91,7 +91,10 @@ class simple_SIR_env(gym.Env):
     self.action_space = spaces.Discrete(3)
     self.observation_space = spaces.Box(low, high,dtype=np.float64)
 
+    # random seed
     self.seed()
+
+    # initialize state
     self.state  = None
 
   def seed(self, seed=None):
@@ -114,15 +117,19 @@ class simple_SIR_env(gym.Env):
     # Update model based on actions
     self.beta = self.betaTable[action]
 
-    # Update state
+    # Unpack state
     S0 = self.state[0]
     I0 = self.state[1]
     R0 = self.state[2]
+
+    # Plug in SIR model
     times = np.array([0,self.dt])
     modelOut = sir_r(self.beta, self.gamma, S0, I0, R0, times)
     S  = modelOut[1][1]
     I  = modelOut[1][2]
     R  = modelOut[1][3]
+
+    # Update state
     self.state = (S,I,R)
 
     # Reward
@@ -130,13 +137,13 @@ class simple_SIR_env(gym.Env):
     economicCost = self.economicCost[action]
     reward = healthCost + economicCost
 
+    # Observation
+    observation = np.array(self.state)
+
     # Check if episode is over
     done = bool(
         I < 0.5
     )
-
-    # Observation
-    observation = np.array(self.state)
 
     return observation, reward, done, {}
 
@@ -147,6 +154,3 @@ class simple_SIR_env(gym.Env):
     self.state = (S,I,R)
     observation = np.array(self.state)
     return observation  # reward, done, info can't be included
-
-
-  #def render(self, mode='human'):

@@ -14,37 +14,43 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Initiate the env
-env = simple_SIR_env()
+S0 = 999  # number of susceptibles at time = 0
+I0 =   1  # number of infected at time = 0
+R0 =   0  # number of recovered (and immune) at time = 0
+hospitalCapacity = 100 # maximum number of people in the ICU
+env = simple_SIR_env(S0, I0, R0, hospitalCapacity)
 
 # Define and Train the agent
-numTimesteps = 50000
+numTimesteps = 150 # number of training steps
 model = DQN(MlpPolicy,env, tensorboard_log="./DQN_SIR_tensorboard/")
 model.learn(total_timesteps=numTimesteps)
 
 
 # Test the trained agent
 obs = env.reset()
-max_steps = 100
-n_steps = 0
 
 S = [obs[0]]
 I = [obs[1]]
 R = [obs[2]]
-
 actions = []
+
+n_steps = 0
+max_steps = 100
 
 for step in range(max_steps):
   n_steps += 1
   action, _ = model.predict(obs, deterministic=True)
-  print("Step {}".format(step + 1))
-  print("Action: ", action)
   obs, reward, done, info = env.step(action)
+
   S.append(obs[0])
   I.append(obs[1])
   R.append(obs[2])
   actions.append(action)
+
+  print("Step {}".format(step + 1))
+  print("Action: ", action)
   print('obs=', obs, 'reward=', reward, 'done=', done)
-  #env.render()
+
   if done:
     print("Done.", "reward=", reward)
     break
@@ -52,16 +58,14 @@ for step in range(max_steps):
 actions.append('-')
 
 # Plot
-steps = np.linspace(0,n_steps,n_steps+1)
-
-fig = plt.figure()
-
 fig, ax = plt.subplots(constrained_layout=True)
+
+steps = np.linspace(0,n_steps,n_steps+1)
 
 plt.plot(steps, S, "-b", label="Susceptible")
 plt.plot(steps, I, "-r", label="Infected")
 plt.plot(steps, R, "-y", label="Recovered")
-plt.plot([0,max(steps)], [300,300], "--k", label="Hospital Capacity")
+plt.plot([0,max(steps)], [hospitalCapacity,hospitalCapacity], "--k", label="Hospital Capacity")
 
 # Create 'Action' axis
 secax = ax.secondary_xaxis('top')
@@ -69,15 +73,13 @@ secax.set_xticks(steps)
 secax.set_xticklabels(actions)
 secax.set_xlabel("Action")
 
-# place a text box in upper left in axes coords
+# Create legends and labels
 textBoxStr = '\n'.join((
     '0: Open all',
     '1: Open half',
     '2: Stay home'))
-
 ax.text(0.7, 0.85, textBoxStr, transform=ax.transAxes, fontsize=11,
-        verticalalignment='top')
-
+        verticalalignment='top') # action text box / legend
 plt.legend(loc="best")
 plt.xlabel("Day")
 plt.ylabel("Number of People")
@@ -87,6 +89,6 @@ saveStr= ("DQN_simple_SIR_results%d.png" % (numTimesteps))
 fig.savefig(saveStr)
 
 '''
-run the following in separate terminal to monitor results:
+run the following in a separate terminal to monitor results:
     tensorboard --logdir ./DQN_SIR_tensorboard/
 '''
