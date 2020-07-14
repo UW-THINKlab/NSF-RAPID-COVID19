@@ -17,9 +17,9 @@ import numpy as np
 env = simple_SIR_env()
 
 # Define and Train the agent
-numEpisodes = 15000
+numTimesteps = 15000
 model = DQN(MlpPolicy,env, tensorboard_log="./DQN_SIR_tensorboard/")
-model.learn(total_timesteps=numEpisodes)
+model.learn(total_timesteps=numTimesteps)
 
 
 # Test the trained agent
@@ -78,21 +78,9 @@ ax.text(0.7, 0.85, textBoxStr, transform=ax.transAxes, fontsize=11,
 plt.legend(loc="best")
 plt.xlabel("Day")
 plt.ylabel("Number of People")
-titleStr= ("DQN agent after %d training episodes" % (numEpisodes))
+titleStr= ("DQN agent after %d training steps" % (numTimesteps))
 plt.title(titleStr)
-fig.savefig('my_figure.png')
-
-
-
-
-
-
-
-
-
-
-# Load trained agent
-#mean_reward, std_reward = evaluate_policy(model, model.get_env(), n_eval_episodes=10)
+fig.savefig('DQN_simple_SIR_results.png')
 
 '''
 run the following in separate terminal to monitor results:
