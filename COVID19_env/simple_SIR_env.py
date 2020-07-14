@@ -132,7 +132,7 @@ class simple_SIR_env(gym.Env):
 
     # Check if episode is over
     done = bool(
-        I == 0
+        I < 0.5
     )
 
     # Observation
@@ -142,8 +142,8 @@ class simple_SIR_env(gym.Env):
 
   def reset(self):
     S = self.S0
-    I = self.R0
-    R = self.I0
+    I = self.I0
+    R = self.R0
     self.state = (S,I,R)
     observation = np.array(self.state)
     return observation  # reward, done, info can't be included
