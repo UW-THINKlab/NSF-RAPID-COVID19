@@ -27,9 +27,10 @@ obs = env.reset()
 max_steps = 100
 n_steps = 0
 
-S = []
-I = []
-R = []
+S = [obs[0]]
+I = [obs[1]]
+R = [obs[2]]
+
 actions = []
 
 for step in range(max_steps):
@@ -48,8 +49,10 @@ for step in range(max_steps):
     print("Done.", "reward=", reward)
     break
 
+actions.append('-')
+
 # Plot
-steps = np.linspace(0,n_steps-1,n_steps)
+steps = np.linspace(0,n_steps,n_steps+1)
 
 fig = plt.figure()
 
