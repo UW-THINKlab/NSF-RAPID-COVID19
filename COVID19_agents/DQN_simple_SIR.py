@@ -17,7 +17,7 @@ import numpy as np
 env = simple_SIR_env()
 
 # Define and Train the agent
-numTimesteps = 15000
+numTimesteps = 50000
 model = DQN(MlpPolicy,env, tensorboard_log="./DQN_SIR_tensorboard/")
 model.learn(total_timesteps=numTimesteps)
 
@@ -83,7 +83,8 @@ plt.xlabel("Day")
 plt.ylabel("Number of People")
 titleStr= ("DQN agent after %d training steps" % (numTimesteps))
 plt.title(titleStr)
-fig.savefig('DQN_simple_SIR_results.png')
+saveStr= ("DQN_simple_SIR_results%d.png" % (numTimesteps))
+fig.savefig(saveStr)
 
 '''
 run the following in separate terminal to monitor results:
