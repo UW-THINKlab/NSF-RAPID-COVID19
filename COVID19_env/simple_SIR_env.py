@@ -69,14 +69,14 @@ class simple_SIR_env(gym.Env):
     # SIR model parameters
     self.beta  = 0.004     # infectious contact rate (/person/day)
     self.gamma = 0.5       # recovery rate (/day)
-    self.hospitalCap = 50  # maximum number of people in the ICU
+    self.hospitalCap = 300  # maximum number of people in the ICU
     self.dt = 1            # time step
 
     # beta variation table, each corresponding to actions 0,1,2 respectively
     self.betaTable = (0.004,0.002,0.001)
 
     # Economic cost table, each corresponding to actions 0,1,2 respectively
-    self.economicCost = (0,-1,-2)
+    self.economicCost = (0,-10,-100)
 
     # SIR model initial conditions
     self.S0 = 999   # number of susceptibles at time = 0
@@ -148,9 +148,5 @@ class simple_SIR_env(gym.Env):
     observation = np.array(self.state)
     return observation  # reward, done, info can't be included
 
-'''
-  def render(self, mode='human'):
-    ...
-  def close (self):
-    ...
-'''
+
+  #def render(self, mode='human'):
