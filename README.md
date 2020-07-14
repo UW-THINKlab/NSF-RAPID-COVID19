@@ -1,4 +1,4 @@
-# COVID19-RL
+# COVID19_RL
 
 ## Setup
 Using python version 3.7.8   
