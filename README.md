@@ -43,4 +43,5 @@ $ python call_testFunc.py
 
 ## stable_baselines_examples
 This folder contains relevant Stable Baselines RL examples for reference when
-working on our COVID-19 RL implementation.
+working on our COVID-19 RL implementation.  
+Documentation: https://stable-baselines.readthedocs.io/en/master/
