@@ -110,7 +110,7 @@ class simple_SIR_env(gym.Env):
     # R <--> python conversions
     numpy2ri.activate() # automatic conversion of numpy objects to rpy2 objects
     robjects.r('''
-           source('simple_SIR_model.R')
+           source('../COVID19_env/simple_SIR_model.R')
     ''') # source all R functions in the specified file
     sir_r = robjects.globalenv['sir_func'] # get R model
 
