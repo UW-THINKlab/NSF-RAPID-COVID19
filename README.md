@@ -15,7 +15,7 @@ $ python installing_packages.py
 ```  
 ## Results
 July 14 - first successful results on simple SIR model with DQN agent.   
-See DQN_simple_SIR_results<#>.png, where the # is the number of  training episodes.
+See DQN_simple_SIR_results#.png, where the # is the number of  training episodes.
 
 ## COVID19_agents
 This folder contains agents that train on COVID19_env. The first is a DQN agent
