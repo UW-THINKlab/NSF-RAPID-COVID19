@@ -16,6 +16,7 @@ $ python installing_packages.py
 ## Results
 July 14 - first successful results on simple SIR model with DQN agent.   
 See DQN_simple_SIR_results#.png, where the # is the number of  training episodes.
+![DQN SIR](/Results/DQN_simple_SIR_results50000.png)
 
 ## COVID19_agents
 This folder contains agents that train on COVID19_env. The first is a DQN agent
@@ -44,4 +45,6 @@ $ python call_testFunc.py
 ## stable_baselines_examples
 This folder contains relevant Stable Baselines RL examples for reference when
 working on our COVID-19 RL implementation.  
-Documentation: https://stable-baselines.readthedocs.io/en/master/
+
+
+Stable Baselines documentation: https://stable-baselines.readthedocs.io/en/master/
