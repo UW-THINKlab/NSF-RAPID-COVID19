@@ -1,2 +1,3 @@
 venv/
 COVID19_agents/DQN_SIR_tensorboard/
+COVID19_env/__pycache__

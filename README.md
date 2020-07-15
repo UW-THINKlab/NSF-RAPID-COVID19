@@ -14,25 +14,26 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```  
 
-Make sure rpy2 is working and install the required R packages:  
+If rpy2 has been installed correctly, you can now install the required R
+packages using the following python script:
 ```console
 $ python installing_packages.py
 ```  
 
+Now you should be able to run any program in this repository. If you notice any missing python package that is needed, please add it to [requirements.txt](requirements.txt). Similarly, if you notice any R packages that are missing, add them to the 'packnames' list in installing_packages.py.
+
 ## COVID19_agents
-This folder contains agents that train on COVID19_env. The first is a DQN agent
-from Stable Baselines (DQN_simple_SIR.py). To train this agent and test it on
-the simple SIR environment, simply run the python script:
+This folder contains agents that train on COVID19_env environments. The first is a DQN agent from Stable Baselines (DQN_simple_SIR.py). To train this agent and test it on the simple SIR environment, simply run the python script:
 ```console
 $ cd COVID19_agents
 $ python DQN_simple_SIR.py
 ```   
 
-Stable Baselines agents use Tensorflow and support the use of Tensorboard to monitor results. To monitor training progress while training an agent, run the following in a separate terminal:
+Stable Baselines agents support the use of Tensorboard to monitor results. To monitor training progress while training an agent, run the following in a separate terminal:
 ```console
 $ tensorboard --logdir ./DQN_SIR_tensorboard/
 ```  
-Replace './DQN_SIR_tensorboard/' with whatever name is specified for
+In general, replace './DQN_SIR_tensorboard/' with whatever name is specified for
 tensorboard_log in the agent's .py file.
 
 ## COVID19_env
@@ -72,6 +73,8 @@ rpy2 docuentation: https://rpy2.github.io/doc/latest/html/index.html
 ## stable_baselines_examples
 This folder contains relevant Stable Baselines RL examples for reference when
 working on our COVID-19 RL implementation.  
+
+*Note:* When using Stable Baselines, you may get many warnings about future versions of some python packages, but from my experience, you can ignore these warnings. I will work on resolving this.
 
 
 Stable Baselines documentation: https://stable-baselines.readthedocs.io/en/master/

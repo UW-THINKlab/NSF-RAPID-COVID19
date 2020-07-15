@@ -17,14 +17,13 @@ import numpy as np
 S0 = 999  # number of susceptibles at time = 0
 I0 =   1  # number of infected at time = 0
 R0 =   0  # number of recovered (and immune) at time = 0
-hospitalCapacity = 100 # maximum number of people in the ICU
+hospitalCapacity = 300 # maximum number of people in the ICU
 env = simple_SIR_env(S0, I0, R0, hospitalCapacity)
 
 # Define and Train the agent
-numTimesteps = 150 # number of training steps
+numTimesteps = 15000 # number of training steps
 model = DQN(MlpPolicy,env, tensorboard_log="./DQN_SIR_tensorboard/")
 model.learn(total_timesteps=numTimesteps)
-
 
 # Test the trained agent
 obs = env.reset()
@@ -85,7 +84,7 @@ plt.xlabel("Day")
 plt.ylabel("Number of People")
 titleStr= ("DQN agent after %d training steps" % (numTimesteps))
 plt.title(titleStr)
-saveStr= ("DQN_simple_SIR_results%d.png" % (numTimesteps))
+saveStr= ("../Results/DQN_simple_SIR_results%d.png" % (numTimesteps))
 fig.savefig(saveStr)
 
 '''
