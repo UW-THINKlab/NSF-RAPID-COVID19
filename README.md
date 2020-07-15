@@ -34,7 +34,14 @@ the simple SIR environment, simply run the python script:
 ```console
 $ cd COVID19_agents
 $ python DQN_simple_SIR.py
-```
+```   
+
+Stable Baselines agents use Tensorflow and support the use of Tensorboard to monitor results. To monitor training progress while training an agent, run the following in a separate terminal:
+```console
+$ tensorboard --logdir ./DQN_SIR_tensorboard/
+```  
+Replace './DQN_SIR_tensorboard/' with whatever name is specified for
+tensorboard_log in the agent's .py file.
 
 ## COVID19_env
 This folder contains RL environments for COVID-19, which are used by COVID19_agents. The first environment is called simple_SIR_env.py and is based
