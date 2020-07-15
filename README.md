@@ -19,14 +19,6 @@ Make sure rpy2 is working and install the required R packages:
 $ python installing_packages.py
 ```  
 
-## Results
-This folder contains images/plots of training results.
-See DQN_simple_SIR_results#.png, where the # is the number of  training episodes.  
-
-Most recent results:
-
-![DQN SIR](/Results/DQN_simple_SIR_results50000.png)
-
 ## COVID19_agents
 This folder contains agents that train on COVID19_env. The first is a DQN agent
 from Stable Baselines (DQN_simple_SIR.py). To train this agent and test it on
@@ -49,6 +41,14 @@ on a minimal SIR model.
 
 These environments are written in Python but utilize dynamics models written in
 R (e.g. simple_SIR_model.R). The conversions between Python and R are handled by  rpy2. See the rpy2_examples folder for examples and the following website for more documentation: https://rpy2.github.io/doc/latest/html/index.html
+
+## Results
+This folder contains images/plots of training results.
+See DQN_simple_SIR_results#.png, where the # is the number of  training episodes.  
+
+Most recent results:
+
+![DQN SIR](./Results/DQN_simple_SIR_results50000.png)
 
 ## COVID19_models
 This folder contains COVID19 spread models in R to be used in the RL environments. The purpose of this folder is to have a place to test the R files before they are integrated into the RL environments.  
