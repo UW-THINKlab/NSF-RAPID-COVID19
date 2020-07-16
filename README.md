@@ -64,6 +64,9 @@ Most recent result:
 
 ![DQN SIR Results](./Results/DQN_simple_SIR_results50000.png)
 
+#### Resources
+- Logging results with Tensorboard https://stable-baselines.readthedocs.io/en/master/guide/tensorboard.html
+
 #### Files
 - `DQN_simple_SIR_results#.png` shows a `DQN_simple_SIR.py` agent's performance during one simulated episode in the `simple_SIR_env.py` environment after the agent has trained for # training steps.
 - [DQN_SIR_reward_results.png](Results/DQN_SIR_reward_results.png) shows the progress of a `DQN_simple_SIR.py` agent in the `simple_SIR_env.py` environment during training
