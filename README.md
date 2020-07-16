@@ -6,7 +6,7 @@ The following setup was used in context of macOS
 Python version 3.7.8   
 R version 4.0.2   
 
-After cloning the GitHub repository, create virtual environment and install the
+After cloning the GitHub repository, create a virtual environment and install the
 required packages:   
 ```console
 $ python3 -m venv venv
@@ -55,7 +55,7 @@ These environments are written in Python but utilize dynamics models written in
 
 #### Files
 - [check_env.py](COVID19_env/check_env.py) uses a Stable Baselines function, `check_env`, to check that a given custom environment follows the gym interface
-- [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) is an environment that uses dynamics defined by `simple_SIR_model.R` to simulate the cost (health cost + economic cost) for a given action (open everything, open halfway, stay at home) in a given state (SIR totals).
+- [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) is an environment that uses dynamics defined by [SIR_example.R](COVID19_models/SIR_example.R) to simulate the cost (health cost + economic cost) for a given action (open everything, open halfway, stay at home) in a given state (SIR totals).
 
 ## Results
 This folder contains images/plots of training results.
@@ -68,8 +68,8 @@ Most recent result:
 - Logging results with Tensorboard https://stable-baselines.readthedocs.io/en/master/guide/tensorboard.html
 
 #### Files
-- `DQN_simple_SIR_results#.png` shows a `DQN_simple_SIR.py` agent's performance during one simulated episode in the `simple_SIR_env.py` environment after the agent has trained for # training steps.
-- [DQN_SIR_reward_results.png](Results/DQN_SIR_reward_results.png) shows the progress of a `DQN_simple_SIR.py` agent in the `simple_SIR_env.py` environment during training
+- `DQN_simple_SIR_results#.png` shows a [DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py) agent's performance during one simulated episode in the [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) environment after the agent has trained for `#` training steps.
+- [DQN_SIR_reward_results.png](Results/DQN_SIR_reward_results.png) shows the progress of a [DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py) agent in the [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) environment during training
 
 ## COVID19_models
 This folder contains COVID19 spread models in `R` to be used in the RL environments.
@@ -88,7 +88,7 @@ $ python call_model.py
 
 ## rpy2_examples
 This folder is to test `rpy2`, such as calling custom R functions from Python.     
-Some custom R functions are located in testFunc.R. They are called by running the Python file call_testFunc.py.
+Some custom R functions are located in [testFunc.R](rpy2_examples/testFunc.R). They are called by running the Python file [call_testFunc.py](rpy2_examples/call_testFunc.py).
 ```console
 $ cd rpy2_examples
 $ python call_testFunc.py
@@ -106,7 +106,7 @@ rpy2 docuentation: https://rpy2.github.io/doc/latest/html/index.html
 This folder contains relevant Stable Baselines RL examples for reference when
 working on our COVID-19 RL implementation.  
 
-*Note:* When using Stable Baselines, you may get many warnings about future versions of some python packages, but from my experience, you can ignore these warnings. I will work on resolving this.  
+*Note:* When using Stable Baselines, you may get many warnings about future versions of some python packages, but from my experience, you can ignore these warnings. Currently working on resolving this.  
 
 #### Resources
 - Stable Baselines documentation https://stable-baselines.readthedocs.io/en/master/  
