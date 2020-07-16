@@ -36,7 +36,7 @@ $ tensorboard --logdir ./DQN_SIR_tensorboard/
 In general, replace './DQN_SIR_tensorboard/' with whatever name is specified for `tensorboard_log` in the agent's `.py` file.
 
 #### Files
-- [DQN_simple_SIR.py](DQN_simple_SIR.py) trains a Stable Baselines DQN agent on the `simple_SIR_env` environment.
+- [DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py) trains a Stable Baselines DQN agent on the `simple_SIR_env` environment.
 
 
 ## COVID19_env
@@ -47,10 +47,10 @@ These environments are written in Python but utilize dynamics models written in
 R (e.g. simple_SIR_model.R). The conversions between Python and R are handled by  rpy2. See the rpy2_examples folder for examples and the following website for more documentation: https://rpy2.github.io/doc/latest/html/index.html
 
 #### Files
-- [check_env.py](check_env.py)
-- [simple_SIR_env.py](simple_SIR_env.py)
-- [simple_SIR_model.R](simple_SIR_model.R)
-- [test_model.py](test_model.py)
+- [check_env.py](COVID19_env/check_env.py)
+- [simple_SIR_env.py](COVID19_env/simple_SIR_env.py)
+- [simple_SIR_model.R](COVID19_env/simple_SIR_model.R)
+- [test_model.py](COVID19_env/test_model.py)
 
 ## Results
 This folder contains images/plots of training results.
@@ -61,13 +61,13 @@ Most recent results:
 ![DQN SIR](./Results/DQN_simple_SIR_results50000.png)
 
 #### Files
-- [DQN_simple_SIR_results15.png](DQN_simple_SIR_results15.png)
-- [DQN_simple_SIR_results150.png](DQN_simple_SIR_results150.png)
-- [DQN_simple_SIR_results1500.png](DQN_simple_SIR_results1500.png)
-- [DQN_simple_SIR_results5000.png](DQN_simple_SIR_results5000.png)
-- [DQN_simple_SIR_results15000.png](DQN_simple_SIR_results15000.png)
-- [DQN_simple_SIR_results50000.png](DQN_simple_SIR_results50000.png)
-- [DQN_SIR_reward_results.png](DQN_SIR_reward_results.png)
+- [DQN_simple_SIR_results15.png](Results/DQN_simple_SIR_results15.png)
+- [DQN_simple_SIR_results150.png](Results/DQN_simple_SIR_results150.png)
+- [DQN_simple_SIR_results1500.png](Results/DQN_simple_SIR_results1500.png)
+- [DQN_simple_SIR_results5000.png](Results/DQN_simple_SIR_results5000.png)
+- [DQN_simple_SIR_results15000.png](Results/DQN_simple_SIR_results15000.png)
+- [DQN_simple_SIR_results50000.png](Results/DQN_simple_SIR_results50000.png)
+- [DQN_SIR_reward_results.png](Results/DQN_SIR_reward_results.png)
 
 ## COVID19_models
 This folder contains COVID19 spread models in R to be used in the RL environments. The purpose of this folder is to have a place to test the R files before they are integrated into the RL environments.  
@@ -79,8 +79,8 @@ $ python call_model.py
 ```
 
 #### Files
-- [call_model.py](call_model.py)
-- [SIR_example.R](SIR_example.R)
+- [call_model.py](COVID19_models/call_model.py)
+- [SIR_example.R](COVID19_models/SIR_example.R)
 
 ## rpy2_examples
 This folder is to test rpy2, such as calling custom R functions.     
@@ -93,9 +93,9 @@ $ python call_testFunc.py
 rpy2 docuentation: https://rpy2.github.io/doc/latest/html/index.html
 
 #### Files
-- [call_testFunc.py](call_testFunc.py)
-- [print_version.py](print_version.py)
-- [testFunc.R](testFunc.R)
+- [call_testFunc.py](rpy2_examples/call_testFunc.py)
+- [print_version.py](rpy2_examples/print_version.py)
+- [testFunc.R](rpy2_examples/testFunc.R)
 
 ## stable_baselines_examples
 This folder contains relevant Stable Baselines RL examples for reference when
@@ -104,8 +104,8 @@ working on our COVID-19 RL implementation.
 *Note:* When using Stable Baselines, you may get many warnings about future versions of some python packages, but from my experience, you can ignore these warnings. I will work on resolving this.
 
 #### Files
-- [customEnv_skeleton.py](customEnv_skeleton.py)
-- [DQN_CartPole.py](DQN_CartPole.py)
-- [soccer_env_example.py](soccer_env_example.py)
+- [customEnv_skeleton.py](stable_baselines_examples/customEnv_skeleton.py)
+- [DQN_CartPole.py](stable_baselines_examples/DQN_CartPole.py)
+- [soccer_env_example.py](stable_baselines_examples/soccer_env_example.py)
 
 Stable Baselines documentation: https://stable-baselines.readthedocs.io/en/master/
