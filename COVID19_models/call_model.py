@@ -13,7 +13,7 @@ robjects.r('''
 ''')
 
 # get functions
-sir_1_r = robjects.globalenv['sir_1']
+sir_1_r = robjects.globalenv['sir_func']
 
 # specify parameters
 beta  = 0.004 # infectious contact rate (/person/day)

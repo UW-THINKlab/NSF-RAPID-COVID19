@@ -1,6 +1,6 @@
 # SIR model tutorial from https://rpubs.com/choisy/sir
 
-sir_1 <- function(beta, gamma, S0, I0, R0, times) {
+sir_func <- function(beta, gamma, S0, I0, R0, times) {
   require(deSolve) # for the "ode" function
 
 # differential equations

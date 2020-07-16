@@ -40,34 +40,27 @@ In general, replace './DQN_SIR_tensorboard/' with whatever name is specified for
 
 
 ## COVID19_env
-This folder contains RL environments for COVID-19, which are used by COVID19_agents. The first environment is called simple_SIR_env.py and is based
-on a minimal SIR model.   
+This folder contains RL environments for COVID-19, which are used to train COVID19_agents.  
 
 These environments are written in Python but utilize dynamics models written in
-R (e.g. simple_SIR_model.R). The conversions between Python and R are handled by  rpy2. See the rpy2_examples folder for examples and the following website for more documentation: https://rpy2.github.io/doc/latest/html/index.html
+R (e.g. simple_SIR_model.R). The conversions between Python and R are handled by `rpy2`. See the [rpy2_examples](rpy2_examples/) folder for examples and the following website for more documentation: https://rpy2.github.io/doc/latest/html/index.html
 
 #### Files
-- [check_env.py](COVID19_env/check_env.py)
-- [simple_SIR_env.py](COVID19_env/simple_SIR_env.py)
-- [simple_SIR_model.R](COVID19_env/simple_SIR_model.R)
-- [test_model.py](COVID19_env/test_model.py)
+- [check_env.py](COVID19_env/check_env.py) uses a Stable Baselines function, `check_env`, to check that a given custom environment follows the gym interface
+- [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) is an environment that uses dynamics defined by `simple_SIR_model.R` to simulate the cost (health cost + economic cost) for a given action (open everything, open halfway, stay at home) in a given state (SIR totals).
+- [simple_SIR_model.R](COVID19_env/simple_SIR_model.R) is an R implementation of an SIR model of disease spread (source: https://rpubs.com/choisy/sir)
 
 ## Results
 This folder contains images/plots of training results.
 See DQN_simple_SIR_results#.png, where the # is the number of  training episodes.  
 
-Most recent results:
+Most recent result:
 
-![DQN SIR](./Results/DQN_simple_SIR_results50000.png)
+![DQN SIR Results](./Results/DQN_simple_SIR_results50000.png)
 
 #### Files
-- [DQN_simple_SIR_results15.png](Results/DQN_simple_SIR_results15.png)
-- [DQN_simple_SIR_results150.png](Results/DQN_simple_SIR_results150.png)
-- [DQN_simple_SIR_results1500.png](Results/DQN_simple_SIR_results1500.png)
-- [DQN_simple_SIR_results5000.png](Results/DQN_simple_SIR_results5000.png)
-- [DQN_simple_SIR_results15000.png](Results/DQN_simple_SIR_results15000.png)
-- [DQN_simple_SIR_results50000.png](Results/DQN_simple_SIR_results50000.png)
-- [DQN_SIR_reward_results.png](Results/DQN_SIR_reward_results.png)
+- `DQN_simple_SIR_results#.png` shows a `DQN_simple_SIR.py` agent performance during one simulated episode in the `simple_SIR_env.py` environment after the agent has trained for # training steps.
+- [DQN_SIR_reward_results.png](Results/DQN_SIR_reward_results.png) shows the progress of a `DQN_simple_SIR.py` agent in the `simple_SIR_env.py` environment during training
 
 ## COVID19_models
 This folder contains COVID19 spread models in R to be used in the RL environments. The purpose of this folder is to have a place to test the R files before they are integrated into the RL environments.  
@@ -79,7 +72,7 @@ $ python call_model.py
 ```
 
 #### Files
-- [call_model.py](COVID19_models/call_model.py)
+- [call_model.py](COVID19_models/call_model.py) calls `SIR_example.R` to test it as a stand-alone model
 - [SIR_example.R](COVID19_models/SIR_example.R)
 
 ## rpy2_examples
@@ -101,11 +94,12 @@ rpy2 docuentation: https://rpy2.github.io/doc/latest/html/index.html
 This folder contains relevant Stable Baselines RL examples for reference when
 working on our COVID-19 RL implementation.  
 
-*Note:* When using Stable Baselines, you may get many warnings about future versions of some python packages, but from my experience, you can ignore these warnings. I will work on resolving this.
+*Note:* When using Stable Baselines, you may get many warnings about future versions of some python packages, but from my experience, you can ignore these warnings. I will work on resolving this.  
+
+Stable Baselines documentation: https://stable-baselines.readthedocs.io/en/master/  
+
 
 #### Files
 - [customEnv_skeleton.py](stable_baselines_examples/customEnv_skeleton.py)
 - [DQN_CartPole.py](stable_baselines_examples/DQN_CartPole.py)
 - [soccer_env_example.py](stable_baselines_examples/soccer_env_example.py)
-
-Stable Baselines documentation: https://stable-baselines.readthedocs.io/en/master/
