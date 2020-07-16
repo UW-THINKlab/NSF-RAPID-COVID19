@@ -21,7 +21,7 @@ hospitalCapacity = 300 # maximum number of people in the ICU
 env = simple_SIR_env(S0, I0, R0, hospitalCapacity)
 
 # Define and Train the agent
-numTimesteps = 15000 # number of training steps
+numTimesteps = 50000 # number of training steps
 model = DQN(MlpPolicy,env, tensorboard_log="./DQN_SIR_tensorboard/")
 model.learn(total_timesteps=numTimesteps)
 

@@ -148,9 +148,11 @@ class simple_SIR_env(gym.Env):
     return observation, reward, done, {}
 
   def reset(self):
+    # reset to initial conditions
     S = self.S0
     I = self.I0
     R = self.R0
+    self.beta  = 0.004
     self.state = (S,I,R)
     observation = np.array(self.state)
     return observation  # reward, done, info can't be included
