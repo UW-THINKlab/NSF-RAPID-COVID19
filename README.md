@@ -23,7 +23,7 @@ $ python installing_packages.py
 Now you should be able to run any program in this repository. If you notice any missing python package that is needed, please add it to [requirements.txt](requirements.txt). Similarly, if you notice any R packages that are missing, add them to the `packnames` list in [installing_packages.py](installing_packages.py).
 
 ## COVID19_agents
-This folder contains agents that train on COVID19_env environments. The first is a DQN agent from Stable Baselines ([DQN_simple_SIR.py](DQN_simple_SIR.py)). To train this agent and test it on the simple SIR environment, simply run the python script:
+This folder contains agents that train on COVID19_env environments. The first is a DQN agent from Stable Baselines ([DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py)). To train this agent and test it on the simple SIR environment, simply run the python script:
 ```console
 $ cd COVID19_agents
 $ python DQN_simple_SIR.py
@@ -48,7 +48,6 @@ R (e.g. simple_SIR_model.R). The conversions between Python and R are handled by
 #### Files
 - [check_env.py](COVID19_env/check_env.py) uses a Stable Baselines function, `check_env`, to check that a given custom environment follows the gym interface
 - [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) is an environment that uses dynamics defined by `simple_SIR_model.R` to simulate the cost (health cost + economic cost) for a given action (open everything, open halfway, stay at home) in a given state (SIR totals).
-- [simple_SIR_model.R](COVID19_env/simple_SIR_model.R) is an R implementation of an SIR model of disease spread (source: https://rpubs.com/choisy/sir)
 
 ## Results
 This folder contains images/plots of training results.
@@ -73,7 +72,7 @@ $ python call_model.py
 
 #### Files
 - [call_model.py](COVID19_models/call_model.py) calls `SIR_example.R` to test it as a stand-alone model
-- [SIR_example.R](COVID19_models/SIR_example.R)
+- [SIR_example.R](COVID19_models/SIR_example.R) is an R implementation of an SIR model of disease spread (source: https://rpubs.com/choisy/sir)
 
 ## rpy2_examples
 This folder is to test rpy2, such as calling custom R functions.     
