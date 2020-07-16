@@ -1,7 +1,7 @@
 # COVID19_RL
 
 ## Setup
-The following setup was used in context of macOS   
+The following setup was used in context of macOS.   
 
 Python version 3.7.8   
 R version 4.0.2   
@@ -83,7 +83,7 @@ $ python call_model.py
 - SIR model tutorial https://rpubs.com/choisy/sir
 
 #### Files
-- [call_model.py](COVID19_models/call_model.py) calls `SIR_example.R` to test it as a stand-alone model
+- [call_model.py](COVID19_models/call_model.py) calls [SIR_example.R](COVID19_models/SIR_example.R) to test it as a stand-alone model
 - [SIR_example.R](COVID19_models/SIR_example.R) is an R implementation of an SIR model of disease spread that is used in [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) (source: https://rpubs.com/choisy/sir)
 
 ## rpy2_examples
