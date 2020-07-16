@@ -25,27 +25,33 @@ numTimesteps = 15000 # number of training steps
 model = DQN(MlpPolicy,env, tensorboard_log="./DQN_SIR_tensorboard/")
 model.learn(total_timesteps=numTimesteps)
 
-# Test the trained agent
+#-- Test the trained agent
+
 obs = env.reset()
 
+# initial conditions
 S = [obs[0]]
 I = [obs[1]]
 R = [obs[2]]
 actions = []
 
-n_steps = 0
+# max steps(days) for test
 max_steps = 100
 
+n_steps = 0 # for tracking number of steps taken
 for step in range(max_steps):
+  # increment
   n_steps += 1
   action, _ = model.predict(obs, deterministic=True)
   obs, reward, done, info = env.step(action)
 
+  # save data to be plotted
   S.append(obs[0])
   I.append(obs[1])
   R.append(obs[2])
   actions.append(action)
 
+  # print update
   print("Step {}".format(step + 1))
   print("Action: ", action)
   print('obs=', obs, 'reward=', reward, 'done=', done)
@@ -54,13 +60,17 @@ for step in range(max_steps):
     print("Done.", "reward=", reward)
     break
 
-actions.append('-')
+actions.append('-') # no action for last time step
 
-# Plot
+#-- Plot results
+
+# initiate figure
 fig, ax = plt.subplots(constrained_layout=True)
 
+# define time vector for plot
 steps = np.linspace(0,n_steps,n_steps+1)
 
+# plot saved data from test
 plt.plot(steps, S, "-b", label="Susceptible")
 plt.plot(steps, I, "-r", label="Infected")
 plt.plot(steps, R, "-y", label="Recovered")
@@ -84,6 +94,8 @@ plt.xlabel("Day")
 plt.ylabel("Number of People")
 titleStr= ("DQN agent after %d training steps" % (numTimesteps))
 plt.title(titleStr)
+
+# save figure to results folder
 saveStr= ("../Results/DQN_simple_SIR_results%d.png" % (numTimesteps))
 fig.savefig(saveStr)
 
