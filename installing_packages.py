@@ -8,7 +8,7 @@ utils = rpackages.importr('utils')
 utils.chooseCRANmirror(ind=1) # select the first mirror in the list
 
 # R package names
-packnames = ('ggplot2', 'deSolve')
+packnames = ('ggplot2', 'deSolve','BB','truncnorm','TruncatedNormal')
 
 # R vector of strings
 from rpy2.robjects.vectors import StrVector
