@@ -40,6 +40,9 @@ In general, replace `./DQN_SIR_tensorboard/` with whatever name is specified for
 
 #### Files
 - [DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py) trains a Stable Baselines DQN agent on the `simple_SIR_env` environment.
+- [A2C_simple_SIR.py](COVID19_agents/A2C_simple_SIR.py) trains a Stable Baselines A2C agent on the `simple_SIR_env` environment.
+- [ACER_simple_SIR.py](COVID19_agents/ACER_simple_SIR.py) trains a Stable Baselines ACER agent on the `simple_SIR_env` environment.
+- [ACKTR_simple_SIR.py](COVID19_agents/ACKTR_simple_SIR.py) trains a Stable Baselines ACKTR agent on the `simple_SIR_env` environment.
 
 
 ## COVID19_env
