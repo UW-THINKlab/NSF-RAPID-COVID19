@@ -1,0 +1,6 @@
+[submodule "COVID19_models/COVID19_models/SEIR"]
+	path = COVID19_models/COVID19_models/SEIR
+	url = https://github.com/UW-THINKlab/SEIR.git
+[submodule "COVID19_models/SEIR"]
+	path = COVID19_models/SEIR
+	url = https://github.com/UW-THINKlab/SEIR.git
