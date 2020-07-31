@@ -3,6 +3,8 @@ custom environment must follow the gym interface
 skeleton copied from:
     https://stable-baselines.readthedocs.io/en/master/guide/custom_env.html
 """
+import sys
+sys.path.append("..")
 
 import gym
 from gym import spaces
@@ -26,7 +28,7 @@ class SEIR_env(gym.Env):
          github.com/openai/gym/blob/master/gym/envs/classic_control/cartpole.py
 
   Observation:
-        Type: Box(4,)
+        Type: Box(4,14)
         Num     Observation       Min     Max
         0       Susceptible       0       Total Population
         1       Exposed           0       Total Population
@@ -64,108 +66,127 @@ class SEIR_env(gym.Env):
 
   metadata = {'render.modes': ['human']}
 
-  def __init__(self, S0, I0, R0, hospitalCapacity):
+  def __init__(self, hospitalCapacity,beta_data,beta_sd_data,latent,gamma,
+  St_data,Et_data,It_data,Rt_data,ODs,pops,current,pred,city_names):
     super(SEIR_env, self).__init__()
 
-    # SIR model parameters
-    self.beta  = 0.004     # infectious contact rate (/person/day)
-    self.gamma = 0.5       # recovery rate (/day)
-    self.hospitalCap = hospitalCapacity  # maximum number of people in the ICU
-    self.dt = 1            # time step
+    # SEIR model inputs
+    self.hospital_cap = hospitalCapacity
+    self.beta_data    = beta_data
+    self.beta_sd_data = beta_sd_data
+    self.latent       = latent
+    self.gamma        = gamma
+    self.St_data      = St_data
+    self.Et_data      = Et_data
+    self.It_data      = It_data
+    self.Rt_data      = Rt_data
+    self.ODs          = ODs
+    self.pops         = pops
+    self.current      = current
+    self.pred         = pred
+    self.city_names   = city_names
 
-    # SIR model initial conditions
-    self.S0 = S0   # number of susceptibles at time = 0
-    self.I0 = I0   # number of infectious at time = 0
-    self.R0 = R0   # number of recovered (and immune) at time = 0
+    # Save intial conditions for reset
+    self.current0 = current
+    self.St_data0 = St_data
+    self.Et_data0 = Et_data
+    self.It_data0 = It_data
+    self.Rt_data0 = Rt_data
 
     # Define action and observation space
     # They must be gym.spaces objects
-    totalPop = self.S0 + self.I0 + self.R0
-    low  = np.array([0,0,0],dtype=np.float64)
-    high = np.array([totalPop,totalPop,totalPop],dtype=np.float64)
-    self.action_space = spaces.Discrete(3)
-    self.observation_space = spaces.Box(low, high,dtype=np.float64)
+    num_cities = len(self.city_names)
+    self.num_cities = num_cities
+    #low_a = np.zeros((num_cities,num_cities),np.float16)
+    #high_a = np.ones((num_cities,num_cities),np.float16)
+    self.action_space = spaces.Box(0, 1,shape=(num_cities*num_cities,),dtype=np.float16)
+    #low_o  = np.zeros((4,num_cities),np.float16)
+    #high_o = np.inf*np.ones((4,num_cities),np.float16)
+    self.observation_space = spaces.Box(0, np.inf,shape=(4*num_cities,),dtype=np.float64)
 
     # random seed
     self.seed()
 
     # initialize state
-    self.state  = None
+    self.state  = np.empty(shape=(4*num_cities,))
 
   def seed(self, seed=None):
     self.np_random, seed = seeding.np_random(seed)
     return [seed]
 
   def step(self, action):
-
     # Check for valid action
     err_msg = "%r (%s) invalid" % (action, type(action))
     assert self.action_space.contains(action), err_msg
 
     # R <--> python conversions
     numpy2ri.activate() # automatic conversion of numpy objects to rpy2 objects
-    robjects.r('''
-           source("../COVID19_models/SEIR/read_input.R")
-           source("../COVID19_models/SEIR/seir_r.R")
-    ''') # source all R functions in the specified file
-    seir_r = robjects.globalenv['seirPredictions'] # get R model
 
     # Update model based on actions
-    self.beta = self.betaTable[action]
+    reduction_factor = np.reshape(action,(self.num_cities,self.num_cities))
 
-    # Unpack state
-    S0 = self.state[0]
-    I0 = self.state[1]
-    R0 = self.state[2]
+    # Get model
+    seir_r = robjects.globalenv['seirPredictions'] # get R model
 
     # Plug in SEIR model
-    times = np.array([0,self.dt])
-
     modelOut = seir_r(reduction_factor,
-                      beta_data    = input_data.rx2("beta_data"),
-                      beta_sd_data = input_data.rx2("beta_sd_data"),
-                      latent       = input_data.rx2("latent"),
-                      gamma        = input_data.rx2("gamma"),
-                      St_data      = input_data.rx2("St_data"),
-                      Et_data      = input_data.rx2("Et_data"),
-                      It_data      = input_data.rx2("It_data"),
-                      Rt_data      = input_data.rx2("Rt_data"),
-                      ODs          = input_data.rx2("ODs"),
-                      pops         = input_data.rx2("pops"),
-                      current      = input_data.rx2("current"),
-                      pred         = input_data.rx2("pred"),
-                      city_names   = input_data.rx2("city_names"))
+                      beta_data    = self.beta_data,
+                      beta_sd_data = self.beta_sd_data,
+                      latent       = self.latent,
+                      gamma        = self.gamma,
+                      St_data      = self.St_data,
+                      Et_data      = self.Et_data,
+                      It_data      = self.It_data,
+                      Rt_data      = self.Rt_data,
+                      ODs          = self.ODs,
+                      pops         = self.pops,
+                      current      = self.current,
+                      pred         = self.pred,
+                      city_names   = self.city_names)
 
+    # Unpack output
     S  = np.array(modelOut.rx2("S"))
     E  = np.array(modelOut.rx2("E"))
     I  = np.array(modelOut.rx2("I"))
     R  = np.array(modelOut.rx2("R"))
 
     # Update state
-    self.state = (S,E,I,R)
+    self.state = np.matrix((S,E,I,R))
+    self.current += self.pred
+    self.St_data[self.current] = S
+    self.Et_data[self.current] = E
+    self.It_data[self.current] = I
+    self.Rt_data[self.current] = R
 
     # Reward
-    overflowI = I - self.hospitalCap
-    healthCost   = -1*I + -10*sum(overflowI>0)
-    economicCost = -(10*(1-action))**2
+    overflowI    = I - self.hospital_cap
+    healthCost   = -1*sum(I) + -10*sum(overflowI>0)
+    economicCost = np.sum(-(10*(1-action))**2)
     reward = healthCost + economicCost
 
     # Observation
-    observation = np.array(self.state)
+    observation = np.reshape(self.state,(4*self.num_cities,))
 
     # Check if episode is over
     done = bool(
-        I < 0.5
+        all(I < 0.5) or
+        self.current >= 62 - self.pred
     )
-
     return observation, reward, done, {}
 
   def reset(self):
+
     # reset to initial conditions
-    S = self.S0
-    I = self.I0
-    R = self.R0
-    self.beta  = 0.004
-    self.state = (S,I,R)
-    observation = np.array(self.state)
+    self.current = self.current0
+    self.St_data = self.St_data0
+    self.Et_data = self.Et_data0
+    self.It_data = self.It_data0
+    self.Rt_data = self.Rt_data0
+
+    self.state = np.matrix((self.St_data[self.current],
+                            self.Et_data[self.current],
+                            self.It_data[self.current],
+                            self.Rt_data[self.current]),dtype=np.float64)
+    observation = np.reshape(self.state,(4*self.num_cities,))
+
     return observation  # reward, done, info can't be included
