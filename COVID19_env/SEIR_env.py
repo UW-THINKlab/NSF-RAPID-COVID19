@@ -6,6 +6,8 @@ skeleton copied from:
 import sys
 sys.path.append("..")
 
+import os
+
 import gym
 from gym import spaces
 from gym.utils import seeding
@@ -66,32 +68,44 @@ class SEIR_env(gym.Env):
 
   metadata = {'render.modes': ['human']}
 
-  def __init__(self, hospitalCapacity,beta_data,beta_sd_data,latent,gamma,
-  St_data,Et_data,It_data,Rt_data,ODs,pops,current,pred,city_names):
+  def __init__(self, hospitalCapacity):
     super(SEIR_env, self).__init__()
+
+    # R <--> python conversions
+    numpy2ri.activate() # automatic conversion of numpy objects to rpy2 objects
+    robjects.r('''
+           source("../COVID19_models/SEIR/read_input.R")
+           source("../COVID19_models/SEIR/seir_r.R")
+    ''') # source all R functions in the specified file
+    getData_r = robjects.globalenv['getData']
+    seir_r = robjects.globalenv['seirPredictions'] # get R model
+
+    # Get input data
+    input_data = getData_r("../COVID19_models/SEIR/RL_input")
+    os.chdir("../../../COVID19_agents")
 
     # SEIR model inputs
     self.hospital_cap = hospitalCapacity
-    self.beta_data    = beta_data
-    self.beta_sd_data = beta_sd_data
-    self.latent       = latent
-    self.gamma        = gamma
-    self.St_data      = St_data
-    self.Et_data      = Et_data
-    self.It_data      = It_data
-    self.Rt_data      = Rt_data
-    self.ODs          = ODs
-    self.pops         = pops
-    self.current      = current
-    self.pred         = pred
-    self.city_names   = city_names
+    self.beta_data    = input_data.rx2("beta_data")
+    self.beta_sd_data = input_data.rx2("beta_sd_data")
+    self.latent       = input_data.rx2("latent")
+    self.gamma        = input_data.rx2("gamma")
+    self.St_data      = np.array(input_data.rx2("St_data"))
+    self.Et_data      = np.array(input_data.rx2("Et_data"))
+    self.It_data      = np.array(input_data.rx2("It_data"))
+    self.Rt_data      = np.array(input_data.rx2("Rt_data"))
+    self.ODs          = input_data.rx2("ODs")
+    self.pops         = input_data.rx2("pops")
+    self.current      = int(input_data.rx2("current")[0])
+    self.pred         = int(input_data.rx2("pred")[0])
+    self.city_names   = input_data.rx2("city_names")
 
     # Save intial conditions for reset
-    self.current0 = current
-    self.St_data0 = St_data
-    self.Et_data0 = Et_data
-    self.It_data0 = It_data
-    self.Rt_data0 = Rt_data
+    self.current0 = self.current
+    self.St_data0 = self.St_data
+    self.Et_data0 = self.Et_data
+    self.It_data0 = self.It_data
+    self.Rt_data0 = self.Rt_data
 
     # Define action and observation space
     # They must be gym.spaces objects
