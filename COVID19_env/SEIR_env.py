@@ -113,7 +113,7 @@ class SEIR_env(gym.Env):
     self.num_cities = num_cities
     #low_a = np.zeros((num_cities,num_cities),np.float16)
     #high_a = np.ones((num_cities,num_cities),np.float16)
-    self.action_space = spaces.Box(0, 1,shape=(num_cities*num_cities,),dtype=np.float16)
+    self.action_space = spaces.Box(low=-1, high=1,shape=(num_cities*num_cities,),dtype=np.float16)
     #low_o  = np.zeros((4,num_cities),np.float16)
     #high_o = np.inf*np.ones((4,num_cities),np.float16)
     self.observation_space = spaces.Box(0, np.inf,shape=(4*num_cities,),dtype=np.float64)
@@ -137,6 +137,7 @@ class SEIR_env(gym.Env):
     numpy2ri.activate() # automatic conversion of numpy objects to rpy2 objects
 
     # Update model based on actions
+    action = (action+1)/2
     reduction_factor = np.reshape(action,(self.num_cities,self.num_cities))
 
     # Get model

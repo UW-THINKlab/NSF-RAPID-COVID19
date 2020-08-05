@@ -41,6 +41,6 @@ if __name__ == '__main__':
     env = SubprocVecEnv([make_env(hospitalCapacity, env_id, i) for i in range(num_cpu)])
 
     # Define and Train the agent
-    numTimesteps = 50000000 # number of training steps
+    numTimesteps = 25000000 # number of training steps
     model = A2C(MlpPolicy, env, tensorboard_log="./SEIR_tensorboard/")
     model.learn(total_timesteps=numTimesteps)
