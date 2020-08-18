@@ -8,14 +8,16 @@ sys.path.append("..")
 
 import os
 
+import rpy2.robjects as robjects
+from rpy2.robjects import numpy2ri
+
 import gym
 from gym import spaces
 from gym.utils import seeding
 
 import numpy as np
 
-import rpy2.robjects as robjects
-from rpy2.robjects import numpy2ri
+from rpy2.robjects.packages import STAP
 
 class SEIR_env(gym.Env):
   """
@@ -71,18 +73,16 @@ class SEIR_env(gym.Env):
   def __init__(self, hospitalCapacity):
     super(SEIR_env, self).__init__()
 
-    # R <--> python conversions
-    numpy2ri.activate() # automatic conversion of numpy objects to rpy2 objects
-    robjects.r('''
-           source("../COVID19_models/SEIR/read_input.R")
-           source("../COVID19_models/SEIR/seir_r.R")
-    ''') # source all R functions in the specified file
-    getData_r = robjects.globalenv['getData']
-    seir_r = robjects.globalenv['seirPredictions'] # get R model
+    # get r
+    cwd = os.getcwd()
+    with open('/Users/benbernhard/Documents/GitHub/COVID19_RL/COVID19_models/SEIR/read_input.R', 'r') as f:
+        string = f.read()
+    read_input = STAP(string, "read_input")
+    getData_r=read_input.getData
 
     # Get input data
-    input_data = getData_r("../COVID19_models/SEIR/RL_input")
-    os.chdir("../../../COVID19_agents")
+    input_data = getData_r("/Users/benbernhard/Documents/GitHub/COVID19_RL/COVID19_models/SEIR/RL_input")
+    os.chdir(cwd)
 
     # SEIR model inputs
     self.hospital_cap = hospitalCapacity
@@ -141,7 +141,11 @@ class SEIR_env(gym.Env):
     reduction_factor = np.reshape(action,(self.num_cities,self.num_cities))
 
     # Get model
-    seir_r = robjects.globalenv['seirPredictions'] # get R model
+    cwd = os.getcwd()
+    with open('/Users/benbernhard/Documents/GitHub/COVID19_RL/COVID19_models/SEIR/seir_r.R', 'r') as f:
+        string = f.read()
+    seir_r = STAP(string, "seir_r")
+    seir_r=seir_r.seirPredictions
 
     # Plug in SEIR model
     modelOut = seir_r(reduction_factor,
@@ -158,7 +162,7 @@ class SEIR_env(gym.Env):
                       current      = self.current,
                       pred         = self.pred,
                       city_names   = self.city_names)
-
+    os.chdir(cwd)
     # Unpack output
     S  = np.array(modelOut.rx2("S"))
     E  = np.array(modelOut.rx2("E"))
@@ -174,8 +178,9 @@ class SEIR_env(gym.Env):
     self.Rt_data[self.current] = R
 
     # Reward
-    overflowI    = I - self.hospital_cap
-    healthCost   = -1*sum(I) + -10*sum(overflowI>0)
+    #overflowI    = I - self.hospital_cap
+    #healthCost   = -1*sum(I) + -10*sum(overflowI>0)
+    healthCost   = -1*sum(I)
     economicCost = np.sum(-(10*(1-action))**2)
     reward = healthCost + economicCost
 
