@@ -11,8 +11,10 @@ required packages:
 ```console
 $ python3 -m venv venv
 $ source venv/bin/activate
+$ brew install cmake
 $ pip install -r requirements.txt
 ```  
+If you have trouble with the Stable Baselines installation, please reference https://stable-baselines.readthedocs.io/en/master/guide/install.html
 
 If rpy2 has been installed correctly, you can now install the required R
 packages using the following python script:
