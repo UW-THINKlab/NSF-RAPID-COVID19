@@ -36,54 +36,54 @@ if __name__ == "__main__":
     hospitalCapacity = 10000 # maximum number of people in the ICU
 
     env_id = "SEIR_env"
-    num_cpu = 4  # Number of processes to use
+    num_cpu = 8  # Number of processes to use
     # Create the vectorized environment
     env = SubprocVecEnv([make_env(hospitalCapacity, env_id, i) for i in range(num_cpu)])
 
     # Define and Train the agent
-    numTimesteps = 250 # number of training steps
+    numTimesteps = 25000000 # number of training steps
     model = A2C(MlpPolicy, env, tensorboard_log="./SEIR_tensorboard/", full_tensorboard_log=True, verbose=False)
-    model.learn(total_timesteps=numTimesteps)
+    trained_model = model.learn(total_timesteps=numTimesteps)
 
 
-    #-- Test the trained agent on single environment
-    env = SEIR_env(hospitalCapacity)
-    num_cities = 14
-    obs = env.reset()
-    obs_mat = np.reshape(obs,(4,num_cities))
-
-    # initial conditions
-    S = np.sum(obs_mat[0])
-    E = np.sum(obs_mat[1])
-    I = np.sum(obs_mat[2])
-    R = np.sum(obs_mat[3])
-    actions = []
-
-    # max steps(days) for test
-    max_steps = 100
-
-    n_steps = 0 # for tracking number of steps taken
-    for step in range(max_steps):
-      # increment
-      n_steps += 1
-      action, _ = model.predict(obs, deterministic=True)
-      obs, reward, done, info = env.step(action)
-      obs_mat = np.reshape(obs,(4,num_cities))
-
-      # save data to be plotted
-      S.append(np.sum(obs_mat[0]))
-      E.append(np.sum(obs_mat[1]))
-      I.append(np.sum(obs_mat[2]))
-      R.append(np.sum(obs_mat[3]))
-      actions.append(np.sum((action+1)/2))
-
-      # print update
-      print("Step {}".format(step + 1))
-      print("Action: ", np.sum((action+1)/2))
-      print('obs=', (np.sum(obs_mat[0]),np.sum(obs_mat[1]),np.sum(obs_mat[2]),np.sum(obs_mat[3])),'reward=', reward,'done=', done)
-
-      if done:
-        print("Done.", "reward=", reward)
+#    #-- Test the trained agent on single environment
+#    env = SEIR_env(hospitalCapacity)
+#    num_cities = 14
+#    obs = env.reset()
+#    obs_mat = np.reshape(obs,(4,num_cities))
+#
+#    # initial conditions
+#    S = np.sum(obs_mat[0])
+#    E = np.sum(obs_mat[1])
+#    I = np.sum(obs_mat[2])
+#    R = np.sum(obs_mat[3])
+#    actions = []
+#
+#    # max steps(days) for test
+#    max_steps = 100
+#
+#    n_steps = 0 # for tracking number of steps taken
+#    for step in range(max_steps):
+#      # increment
+#      n_steps += 1
+#      action, _ = model.predict(obs, deterministic=True)
+#      obs, reward, done, info = env.step(action)
+#      obs_mat = np.reshape(obs,(4,num_cities))
+#
+#      # save data to be plotted
+#      S.append(np.sum(obs_mat[0]))
+#      E.append(np.sum(obs_mat[1]))
+#      I.append(np.sum(obs_mat[2]))
+#      R.append(np.sum(obs_mat[3]))
+#      actions.append(np.sum((action+1)/2))
+#
+#      # print update
+#      print("Step {}".format(step + 1))
+#      print("Action: ", np.sum((action+1)/2))
+#      print('obs=', (np.sum(obs_mat[0]),np.sum(obs_mat[1]),np.sum(obs_mat[2]),np.sum(obs_mat[3])),'reward=', reward,'done=', done)
+#
+#      if done:
+#        print("Done.", "reward=", reward)
 
 
 

@@ -50,20 +50,12 @@ class SEIR_env(gym.Env):
 
         Health cost:
             -1 for every infected case
-           -10 for every infected case that brings total infected count above a
-                specified maximum (hospital capacity)
+           -10 for every infected case that brings total infected count of a
+                given city above a specified maximum (hospital capacity)
         Economic cost:
-             0 for every day using 'open everything'
-           -10 for every day using 'open at half capacity'
-          -100 for every day using 'stay at home order'
-
-  Starting State:
-        Susceptible:
-        Infected:
-        Recovered:
+            sum(-(10*(1-action))**2)
 
   Episode Termination:
-        Number of infections is zero
         Episode length (time) reaches specified maximum (end time)
   """
 
@@ -111,11 +103,7 @@ class SEIR_env(gym.Env):
     # They must be gym.spaces objects
     num_cities = len(self.city_names)
     self.num_cities = num_cities
-    #low_a = np.zeros((num_cities,num_cities),np.float16)
-    #high_a = np.ones((num_cities,num_cities),np.float16)
     self.action_space = spaces.Box(low=-1, high=1,shape=(num_cities*num_cities,),dtype=np.float16)
-    #low_o  = np.zeros((4,num_cities),np.float16)
-    #high_o = np.inf*np.ones((4,num_cities),np.float16)
     self.observation_space = spaces.Box(0, np.inf,shape=(4*num_cities,),dtype=np.float64)
 
     # random seed
@@ -178,9 +166,8 @@ class SEIR_env(gym.Env):
     self.Rt_data[self.current] = R
 
     # Reward
-    #overflowI    = I - self.hospital_cap
-    #healthCost   = -1*sum(I) + -10*sum(overflowI>0)
-    healthCost   = -1*sum(I)
+    overflowI    = I - self.hospital_cap
+    healthCost   = -1*sum(I) + -10*sum(overflowI>0)
     economicCost = np.sum(-(10*(1-action))**2)
     reward = healthCost + economicCost
 
