@@ -25,7 +25,7 @@ $ python installing_packages.py
 Now you should be able to run any program in this repository. If you notice any missing python package that is needed, please add it to [requirements.txt](requirements.txt). Similarly, if you notice any R packages that are missing, add them to the `packnames` list in [installing_packages.py](installing_packages.py).
 
 ## COVID19_agents
-This folder contains agents that train on `COVID19_env` environments. The first is a DQN agent from Stable Baselines ([DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py)). To train this agent and test it on the simple SIR environment, simply run the python script:
+This folder contains agents that train on `COVID19_env` environments. As a simple example, there is a DQN agent from Stable Baselines ([DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py)). To train this agent and test it on the simple SIR environment, simply run the python script:
 ```console
 $ cd COVID19_agents
 $ python DQN_simple_SIR.py
@@ -42,9 +42,7 @@ In general, replace `./DQN_SIR_tensorboard/` with whatever name is specified for
 
 #### Files
 - [DQN_simple_SIR.py](COVID19_agents/DQN_simple_SIR.py) trains a Stable Baselines DQN agent on the `simple_SIR_env` environment.
-- [A2C_simple_SIR.py](COVID19_agents/A2C_simple_SIR.py) trains a Stable Baselines A2C agent on the `simple_SIR_env` environment.
-- [ACER_simple_SIR.py](COVID19_agents/ACER_simple_SIR.py) trains a Stable Baselines ACER agent on the `simple_SIR_env` environment.
-- [ACKTR_simple_SIR.py](COVID19_agents/ACKTR_simple_SIR.py) trains a Stable Baselines ACKTR agent on the `simple_SIR_env` environment.
+- [A2C_SEIR.py](COVID19_agents/A2C_simple_SIR.py) trains a Stable Baselines A2C agent on the `SEIR_env` environment.
 
 
 ## COVID19_env
@@ -61,11 +59,14 @@ These environments are written in Python but utilize dynamics models written in
 #### Files
 - [check_env.py](COVID19_env/check_env.py) uses a Stable Baselines function, `check_env`, to check that a given custom environment follows the gym interface
 - [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) is an environment that uses dynamics defined by [SIR_example.R](COVID19_models/SIR_example.R) to simulate the cost (health cost + economic cost) for a given action (open everything, open halfway, stay at home) in a given state (SIR totals).
+- [SEIR_env.py](COVID19_env/SEIR_env.py) is an environment that uses dynamics defined by [seir_r.R](COVID19_models/SEIR/seir_r.R) to simulate the spread of COVID-19 within and between 14 cities.
+- [opt_hyp.py](COVID19_env/opt_hyp.py) uses Optuna to attempt to optimize the hyperparameters of an agent on a given environment. However, this has not been successful thus far for this project.
+
 
 ## Results
 This folder contains images/plots of training results.
 
-Most recent result:
+DQN SIR results:
 
 ![DQN SIR Results](./Results/DQN_simple_SIR_results50000.png)
 
@@ -90,6 +91,7 @@ $ python call_model.py
 #### Files
 - [call_model.py](COVID19_models/call_model.py) calls [SIR_example.R](COVID19_models/SIR_example.R) to test it as a stand-alone model
 - [SIR_example.R](COVID19_models/SIR_example.R) is an R implementation of an SIR model of disease spread that is used in [simple_SIR_env.py](COVID19_env/simple_SIR_env.py) (source: https://rpubs.com/choisy/sir)
+- For SEIR folder, see https://github.com/UW-THINKlab/SEIR/
 
 ## rpy2_examples
 This folder is to test `rpy2`, such as calling custom R functions from Python.     
