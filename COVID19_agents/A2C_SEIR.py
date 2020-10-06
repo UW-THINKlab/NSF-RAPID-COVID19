@@ -66,7 +66,7 @@ if __name__ == "__main__":
 #    for step in range(max_steps):
 #      # increment
 #      n_steps += 1
-#      action, _ = model.predict(obs, deterministic=True)
+#      action, _ = model.predict(obs, deterministic=True)    #obtain optimal actions based on current state (obs)
 #      obs, reward, done, info = env.step(action)
 #      obs_mat = np.reshape(obs,(4,num_cities))
 #
